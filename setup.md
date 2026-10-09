@@ -18,19 +18,22 @@ AWS_ACCOUNT_ID=<account-id>
 AWS_REGION=eu-central-1
 ```
 
-## 2. Bootstrap CDK (once per account)
+## 2. Bootstrap
+
+Runs `cdk bootstrap` for the stage's account and deploys the GitHub OIDC stack (the role the pipeline logs in with, so it is deployed by hand, never by the pipeline). From the repository root:
 
 ```bash
-npx cdk bootstrap aws://<account-id>/eu-central-1
+npm run platform:bootstrap test          # or: prod
+npm run person-service:bootstrap test    # or: prod
 ```
 
-## 3. Deploy the GitHub OIDC stack
+## 3. Deploy manually (optional)
 
-This creates the role the pipeline logs in with, so it is deployed by hand, never by the pipeline.
+The pipeline deploys on push; to deploy or inspect from your machine:
 
 ```bash
-cd services/person-service   # or: cd infra
-npx cdk deploy GithubOidc-PersonService-test -c stage=test   # or: GithubOidc-Platform-test
+npm run person-service:synth test
+npm run person-service:deploy test
 ```
 
 ## 4. Test

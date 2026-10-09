@@ -2,12 +2,18 @@
   "name": "ti-serverless",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "infra",
+    "services/*"
+  ],
   "scripts": {
     "build": "tsc --noEmit",
-    "synth:platform": "cd infra && cdk synth",
-    "deploy:platform": "cd infra && cdk deploy",
-    "synth:person": "cd services/person-service && cdk synth",
-    "deploy:person": "cd services/person-service && cdk deploy"
+    "platform:bootstrap": "npm run bootstrap -w platform --",
+    "platform:synth": "npm run synth -w platform --",
+    "platform:deploy": "npm run deploy -w platform --",
+    "person-service:bootstrap": "npm run bootstrap -w person-service --",
+    "person-service:synth": "npm run synth -w person-service --",
+    "person-service:deploy": "npm run deploy -w person-service --"
   },
   "devDependencies": {
     "@types/node": "^24.19.1",
