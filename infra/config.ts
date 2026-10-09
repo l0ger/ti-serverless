@@ -3,7 +3,11 @@ import type { App, Environment } from 'aws-cdk-lib';
 export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
 
-export const githubRepository = 'l0ger/ti-serverless';
+/**
+ * GitHub repository in the immutable OIDC `sub` form `owner@<owner id>/repo@<repo id>`.
+ * Repos created after 15 July 2026 emit this form; IDs from https://api.github.com/repos/l0ger/ti-serverless
+ */
+export const githubRepository = 'l0ger@16212989/ti-serverless@1411527725';
 
 export interface PlatformConfig {
   stage: Stage;

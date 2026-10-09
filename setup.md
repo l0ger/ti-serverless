@@ -4,7 +4,7 @@ For the scope of this assessment, and for simplicity, there is one AWS account p
 
 | Unit | Folder | Stack |
 |---|---|---|
-| Platform | `infra/` | `Platform-<stage>`, `GithubOidc-<stage>` |
+| Platform | `infra/` | `Platform-<stage>`, `GithubOidc-<stage>`, `GithubOidcProvider` (per account) |
 | Person | `services/person/` | `Person-<stage>` |
 
 You need: `nvm use && npm install`, AWS admin credentials for the target account, and admin access to the GitHub repo.
@@ -20,7 +20,12 @@ AWS_REGION=eu-central-1
 
 ## 2. Bootstrap
 
-Runs `cdk bootstrap` for the stage's account and deploys the GitHub OIDC stack `GithubOidc-<stage>`: the provider and the role `github-deploy-<stage>` that all pipelines log in with. It is deployed by hand, never by the pipeline. Once per stage, from the repository root:
+Runs `cdk bootstrap` for the stage's account and deploys two stacks, by hand, never by the pipeline:
+
+- `GithubOidcProvider`: GitHub's OIDC provider, one per account. If test and prod share an account, the second bootstrap leaves it unchanged.
+- `GithubOidc-<stage>`: the role `github-deploy-<stage>` that all pipelines of that stage log in with.
+
+Once per stage, from the repository root:
 
 ```bash
 npm run platform:bootstrap test          # or: prod
