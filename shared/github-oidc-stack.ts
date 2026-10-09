@@ -15,7 +15,6 @@ export interface GithubOidcStackProps extends StackProps {
 }
 
 /**
- * GitHub Actions deploy CDK apps into this account without stored AWS keys.
  * Deployed manually, once per account, never by the pipeline itself.
  */
 export class GithubOidcStack extends Stack {

@@ -11,15 +11,13 @@ export interface PersonServiceConfig {
   githubEnvironment: string;
 }
 
-const configs: Record<Stage, PersonServiceConfig> = {
+const configs: Record<Stage, Omit<PersonServiceConfig, 'env'>> = {
   test: {
     stage: 'test',
-    env: { account: '333333333333', region: 'eu-central-1' }, // TODO: person-service test account ID
     githubEnvironment: 'person-test',
   },
   prod: {
     stage: 'prod',
-    env: { account: '444444444444', region: 'eu-central-1' }, // TODO: person-service prod account ID
     githubEnvironment: 'person-prod',
   },
 };
@@ -33,6 +31,19 @@ export function getStage(app: App): Stage {
   return stage;
 }
 
+/** Loads `env/<stage>.env` (shared with the GitHub workflow) and builds the stage config. */
 export function getPersonServiceConfig(stage: Stage): PersonServiceConfig {
-  return configs[stage];
+  process.loadEnvFile(new URL(`../env/${stage}.env`, import.meta.url));
+  return {
+    ...configs[stage],
+    env: { account: requireEnv('AWS_ACCOUNT_ID'), region: requireEnv('AWS_REGION') },
+  };
+}
+
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing ${name}. Set it in the stage's env file.`);
+  }
+  return value;
 }
