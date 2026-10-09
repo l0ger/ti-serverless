@@ -1,0 +1,24 @@
+{
+  "name": "ti-serverless",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json && npm run build --workspaces --if-present",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "aws-cdk": "2.1145.0",
+    "aws-cdk-lib": "2.273.0",
+    "constructs": "^10.4.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@ti-serverless/person-service",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy"
+  }
+}
