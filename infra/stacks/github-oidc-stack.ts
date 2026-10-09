@@ -10,15 +10,9 @@ export interface GithubOidcStackProps extends StackProps {
   githubEnvironment: string;
 }
 
-/**
- * Stage-level: the deploy role GitHub Actions assumes for one stage, shared by the platform and all services.
- * Uses the account's GitHub OIDC provider (GithubOidcProviderStack).
- * Deployed manually, once per stage, never by the pipeline itself.
- */
 export class GithubOidcStack extends Stack {
   constructor(scope: Construct, id: string, props: GithubOidcStackProps) {
     super(scope, id, props);
-
     const role = new Role(this, 'DeployRole', {
       roleName: `github-deploy-${props.githubEnvironment}`,
       description: `GitHub Actions deploy role for ${props.repository} (${props.githubEnvironment})`,
