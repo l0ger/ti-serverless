@@ -11,9 +11,9 @@
     "platform:bootstrap": "npm run bootstrap -w platform --",
     "platform:synth": "npm run synth -w platform --",
     "platform:deploy": "npm run deploy -w platform --",
-    "person-service:bootstrap": "npm run bootstrap -w person-service --",
-    "person-service:synth": "npm run synth -w person-service --",
-    "person-service:deploy": "npm run deploy -w person-service --"
+    "person:bootstrap": "npm run bootstrap -w person --",
+    "person:synth": "npm run synth -w person --",
+    "person:deploy": "npm run deploy -w person --"
   },
   "devDependencies": {
     "@types/node": "^24.19.1",

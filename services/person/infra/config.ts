@@ -5,13 +5,13 @@ export type Stage = (typeof stages)[number];
 
 export const githubRepository = 'l0ger/ti-serverless';
 
-export interface PersonServiceConfig {
+export interface PersonConfig {
   stage: Stage;
   env: Required<Environment>;
   githubEnvironment: string;
 }
 
-const configs: Record<Stage, Omit<PersonServiceConfig, 'env'>> = {
+const configs: Record<Stage, Omit<PersonConfig, 'env'>> = {
   test: {
     stage: 'test',
     githubEnvironment: 'person-test',
@@ -32,7 +32,7 @@ export function getStage(app: App): Stage {
 }
 
 /** Loads `env/<stage>.env` (shared with the GitHub workflow) and builds the stage config. */
-export function getPersonServiceConfig(stage: Stage): PersonServiceConfig {
+export function getPersonConfig(stage: Stage): PersonConfig {
   process.loadEnvFile(new URL(`../env/${stage}.env`, import.meta.url));
   return {
     ...configs[stage],

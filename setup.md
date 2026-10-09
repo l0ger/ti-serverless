@@ -5,7 +5,7 @@ Do this once per unit and stage. After that, pushing to any branch deploys to **
 | Unit | Folder | GitHub environments |
 |---|---|---|
 | Platform | `infra/` | `platform-test`, `platform-prod` |
-| Person Service | `services/person-service/` | `person-test`, `person-prod` |
+| Person | `services/person/` | `person-test`, `person-prod` |
 
 You need: `nvm use && npm install`, AWS admin credentials for the target account, and admin access to the GitHub repo.
 
@@ -26,7 +26,7 @@ Runs `cdk bootstrap` for the stage's account and deploys the GitHub OIDC stack (
 
 ```bash
 npm run platform:bootstrap test          # or: prod
-npm run person-service:bootstrap test    # or: prod
+npm run person:bootstrap test    # or: prod
 ```
 
 ## 3. Deploy manually (optional)
@@ -34,8 +34,8 @@ npm run person-service:bootstrap test    # or: prod
 The pipeline deploys on push; to deploy or inspect from your machine:
 
 ```bash
-npm run person-service:synth test
-npm run person-service:deploy test
+npm run person:synth test
+npm run person:deploy test
 ```
 
 ## 4. Test

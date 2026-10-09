@@ -1,16 +1,16 @@
-name: Person Service
+name: Person
 
 on:
   push:
     branches: ['**']
     paths:
-      - services/person-service/**
+      - services/person/**
       - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json
       - .nvmrc
-      - .github/workflows/person-service.yml
+      - .github/workflows/person.yml
       - .github/workflows/_deploy.yml
 
 permissions:
@@ -22,8 +22,8 @@ jobs:
     if: github.ref != 'refs/heads/master'
     uses: ./.github/workflows/_deploy.yml
     with:
-      working-directory: services/person-service
-      stack: PersonService-test
+      working-directory: services/person
+      stack: Person-test
       stage: test
       environment: person-test
 
@@ -31,7 +31,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/_deploy.yml
     with:
-      working-directory: services/person-service
-      stack: PersonService-prod
+      working-directory: services/person
+      stack: Person-prod
       stage: prod
       environment: person-prod
