@@ -5,7 +5,6 @@ on:
     branches: ['**']
     paths:
       - infra/**
-      - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json
@@ -25,7 +24,7 @@ jobs:
       working-directory: infra
       stack: Platform-test
       stage: test
-      environment: platform-test
+      environment: test
 
   prod:
     if: github.ref == 'refs/heads/master'
@@ -34,4 +33,4 @@ jobs:
       working-directory: infra
       stack: Platform-prod
       stage: prod
-      environment: platform-prod
+      environment: prod

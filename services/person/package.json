@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "bootstrap": "f() { cdk bootstrap -c stage=${1:-test} && cdk deploy 'GithubOidc-*' -c stage=${1:-test}; }; f",
     "synth": "f() { cdk synth -c stage=${1:-test}; }; f",
     "deploy": "f() { cdk deploy 'Person-*' -c stage=${1:-test}; }; f"
   }

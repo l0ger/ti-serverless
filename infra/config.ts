@@ -14,11 +14,11 @@ export interface PlatformConfig {
 const configs: Record<Stage, Omit<PlatformConfig, 'env'>> = {
   test: {
     stage: 'test',
-    githubEnvironment: 'platform-test',
+    githubEnvironment: 'test',
   },
   prod: {
     stage: 'prod',
-    githubEnvironment: 'platform-prod',
+    githubEnvironment: 'prod',
   },
 };
 
