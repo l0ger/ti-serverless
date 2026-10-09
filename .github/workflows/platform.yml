@@ -1,0 +1,34 @@
+name: Platform
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - infra/**
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - .nvmrc
+      - .github/workflows/platform.yml
+      - .github/workflows/_deploy.yml
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+    if: github.ref != 'refs/heads/master'
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      working-directory: infra
+      stage: test
+      environment: platform-test
+
+  prod:
+    if: github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      working-directory: infra
+      stage: prod
+      environment: platform-prod

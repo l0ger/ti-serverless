@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: Folder containing the CDK app (cdk.json)
+        type: string
+        required: true
+      stage:
+        description: CDK stage context (test | prod)
+        type: string
+        required: true
+      environment:
+        description: GitHub environment holding AWS_ROLE_ARN, AWS_REGION, CDK_DEPLOY_ACCOUNT
+        type: string
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: cdk deploy
+        working-directory: ${{ inputs.working-directory }}
+        env:
+          CDK_DEPLOY_ACCOUNT: ${{ vars.CDK_DEPLOY_ACCOUNT }}
+        run: npx cdk deploy -c stage=${{ inputs.stage }} --require-approval never
