@@ -15,6 +15,7 @@
     "person:deploy": "npm run deploy -w person --"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.164",
     "@types/node": "^24.19.1",
     "aws-cdk": "2.1145.0",
     "aws-cdk-lib": "2.273.0",
