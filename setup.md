@@ -20,6 +20,8 @@ AWS_REGION=eu-central-1
 
 ## 2. Bootstrap
 
+For the scope of this assessment, and for simplicity I assume we only want have account per stage. Running bootstrap command per stage for one of services is enough for creation of GitHub OIDC role.
+
 Runs `cdk bootstrap` for the stage's account and deploys the GitHub OIDC stack (the role the pipeline logs in with, so it is deployed by hand, never by the pipeline). From the repository root:
 
 ```bash
