@@ -1,7 +1,7 @@
 {
-  "app": "npx tsx infra/app.ts",
+  "app": "npx tsx app.ts",
   "watch": {
-    "include": ["infra/**"]
+    "include": ["**"]
   },
   "context": {
     "stage": "test"

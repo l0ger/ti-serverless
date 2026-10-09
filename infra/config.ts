@@ -1,20 +1,33 @@
-import type { App } from 'aws-cdk-lib';
+import type { App, Environment } from 'aws-cdk-lib';
 
-export const stages = ['dev', 'prod'] as const;
+export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
 
 export interface PlatformConfig {
   stage: Stage;
+  env: Required<Environment>;
 }
 
+const configs: Record<Stage, PlatformConfig> = {
+  test: {
+    stage: 'test',
+    env: { account: '111111111111', region: 'eu-central-1' }, // TODO: platform test account ID
+  },
+  prod: {
+    stage: 'prod',
+    env: { account: '222222222222', region: 'eu-central-1' }, // TODO: platform prod account ID
+  },
+};
+
+/** Reads the stage from `cdk ... -c stage=<stage>`. */
 export function getStage(app: App): Stage {
-  const stage = app.node.tryGetContext('stage') ?? 'dev';
+  const stage = app.node.tryGetContext('stage');
   if (!stages.includes(stage)) {
-    throw new Error(`Unknown stage "${stage}". Expected one of: ${stages.join(', ')}`);
+    throw new Error(`Unknown stage "${stage}". Pass -c stage=<${stages.join('|')}>`);
   }
   return stage;
 }
 
 export function getPlatformConfig(stage: Stage): PlatformConfig {
-  return { stage };
+  return configs[stage];
 }

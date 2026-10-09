@@ -3,16 +3,12 @@ import { getPlatformConfig, getStage } from './config';
 import { PlatformStack } from './stacks/platform-stack';
 
 const app = new App();
-const stage = getStage(app);
-const config = getPlatformConfig(stage);
+const config = getPlatformConfig(getStage(app));
 
-const stack = new PlatformStack(app, `Platform-${stage}`, {
+const stack = new PlatformStack(app, `Platform-${config.stage}`, {
   config,
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
+  env: config.env,
 });
 
-Tags.of(stack).add('Stage', stage);
+Tags.of(stack).add('Stage', config.stage);
 Tags.of(stack).add('Owner', 'platform');
