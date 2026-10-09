@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - services/person-service/**
+      - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json
@@ -22,6 +23,7 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: services/person-service
+      stack: PersonService-test
       stage: test
       environment: person-test
 
@@ -30,5 +32,6 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: services/person-service
+      stack: PersonService-prod
       stage: prod
       environment: person-prod

@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - infra/**
+      - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json
@@ -22,6 +23,7 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: infra
+      stack: Platform-test
       stage: test
       environment: platform-test
 
@@ -30,5 +32,6 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: infra
+      stack: Platform-prod
       stage: prod
       environment: platform-prod

@@ -7,6 +7,10 @@ on:
         description: Folder containing the CDK app (cdk.json)
         type: string
         required: true
+      stack:
+        description: Stack to deploy (never the GithubOidc-* stack)
+        type: string
+        required: true
       stage:
         description: CDK stage context (test | prod)
         type: string
@@ -47,4 +51,4 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
         env:
           CDK_DEPLOY_ACCOUNT: ${{ vars.CDK_DEPLOY_ACCOUNT }}
-        run: npx cdk deploy -c stage=${{ inputs.stage }} --require-approval never
+        run: npx cdk deploy ${{ inputs.stack }} -c stage=${{ inputs.stage }} --require-approval never

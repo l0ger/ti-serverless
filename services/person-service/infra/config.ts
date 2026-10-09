@@ -3,19 +3,24 @@ import type { App, Environment } from 'aws-cdk-lib';
 export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
 
+export const githubRepository = 'l0ger/ti-serverless';
+
 export interface PersonServiceConfig {
   stage: Stage;
   env: Required<Environment>;
+  githubEnvironment: string;
 }
 
 const configs: Record<Stage, PersonServiceConfig> = {
   test: {
     stage: 'test',
     env: { account: '333333333333', region: 'eu-central-1' }, // TODO: person-service test account ID
+    githubEnvironment: 'person-test',
   },
   prod: {
     stage: 'prod',
     env: { account: '444444444444', region: 'eu-central-1' }, // TODO: person-service prod account ID
+    githubEnvironment: 'person-prod',
   },
 };
 
