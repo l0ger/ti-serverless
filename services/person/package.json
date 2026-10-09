@@ -5,5 +5,8 @@
   "scripts": {
     "synth": "f() { cdk synth -c stage=${1:-test}; }; f",
     "deploy": "f() { cdk deploy 'Person-*' -c stage=${1:-test}; }; f"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }
