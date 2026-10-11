@@ -57,16 +57,30 @@ services/<name>/
 
 ## Commands
 
-Run from the repository root. Use Node.js 24 (`nvm use`).
+Run all commands from the repository root with Node.js 24 (`nvm use`).
 
+### Develop
+
+| Command | Description |
+|---|---|
 | `npm install` | Install all workspaces |
 | `npm run build` | Type-check everything (`tsc --noEmit`) |
 | `npm test` | Run all unit tests (Jest) |
+
+### Deploy
+
+| Command | Description |
+|---|---|
 | `npm run platform:bootstrap <stage>` | CDK bootstrap and the GitHub OIDC stacks, once per stage |
 | `npm run platform:deploy <stage>` | Deploy `platform-<stage>` |
 | `npm run person:deploy <stage>` | Deploy `person-data-<stage>` and `person-<stage>` |
 
 `<stage>` is `test` or `prod` and defaults to `test`. Deploy the platform before any service, because services publish to its event bus.
+
+```bash
+npm run platform:deploy test
+npm run person:deploy test
+```
 
 
 ## CI/CD
