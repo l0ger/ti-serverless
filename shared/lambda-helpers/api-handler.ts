@@ -1,13 +1,13 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import type { z } from 'zod';
 
-export abstract class ApiHandler<TSchema extends z.ZodType, TResult> {
-  protected abstract readonly schema: TSchema;
+export abstract class ApiHandler<TRequest, TResponse> {
+  protected abstract readonly schema: z.ZodType<TRequest>;
   protected readonly statusCode: number = 200;
 
-  protected abstract execute(param: z.output<TSchema>): Promise<TResult>;
+  protected abstract execute(request: TRequest): Promise<TResponse>;
 
-  protected headers(_result: TResult): Record<string, string> {
+  protected headers(_response: TResponse): Record<string, string> {
     return {};
   }
 

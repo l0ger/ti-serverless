@@ -1,8 +1,8 @@
 import { ApiHandler } from 'shared/lambda-helpers';
-import type { CreatePersonParam, CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
+import type { CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
 import { CreatePersonRequest } from './schema';
 
-export class CreatePersonHandler extends ApiHandler<typeof CreatePersonRequest, CreatePersonResponse> {
+export class CreatePersonHandler extends ApiHandler<CreatePersonRequest, CreatePersonResponse> {
   protected readonly schema = CreatePersonRequest;
   protected override readonly statusCode = 201;
 
@@ -10,8 +10,8 @@ export class CreatePersonHandler extends ApiHandler<typeof CreatePersonRequest, 
     super();
   }
 
-  protected execute(param: CreatePersonParam): Promise<CreatePersonResponse> {
-    return this.createPerson.execute(param);
+  protected execute(request: CreatePersonRequest): Promise<CreatePersonResponse> {
+    return this.createPerson.execute(request);
   }
 
   protected override headers(person: CreatePersonResponse): Record<string, string> {
