@@ -5,7 +5,6 @@ export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
 
 export interface PersonConfig {
-  /** Prefix for stack and resource names. */
   name: string;
   stage: Stage;
   env: Required<Environment>;

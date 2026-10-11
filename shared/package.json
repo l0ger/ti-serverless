@@ -3,6 +3,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./cdk": "./cdk/index.ts"
+    "./cdk": "./cdk/index.ts",
+    "./lambda-helpers": "./lambda-helpers/index.ts"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }

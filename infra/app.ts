@@ -16,7 +16,6 @@ const oidcProviderStack = new GithubOidcProviderStack(app, `${config.name}-githu
   env: config.env,
 });
 
-// Stage-level deploy role.
 const oidcStack = new GithubOidcStack(app, `${config.name}-github-oidc-${config.stage}`, {
   env: config.env,
   roleName: `${config.name}-github-deploy-${config.stage}`,

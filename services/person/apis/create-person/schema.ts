@@ -11,6 +11,6 @@ export const CreatePersonRequest = z.object({
     city: z.string().trim().min(1).max(100),
     country: z.string().trim().length(2).toUpperCase(),
   }),
-});
+}) ;
 
 export type CreatePersonRequest = z.infer<typeof CreatePersonRequest>;

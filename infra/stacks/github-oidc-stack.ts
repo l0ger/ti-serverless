@@ -4,19 +4,11 @@ import type { Construct } from 'constructs';
 import { GITHUB_OIDC_HOST, githubOidcProviderArn } from './github-oidc-provider-stack';
 
 export interface GithubOidcStackProps extends StackProps {
-  /** Deploy role name; the GitHub workflow builds its ARN from this. */
   roleName: string;
-  /** GitHub repository allowed to assume the role, as in the OIDC `sub` claim: `owner@<id>/repo@<id>`. */
   repository: string;
-  /** GitHub environment the workflow job must run in (e.g. `prod`). */
   githubEnvironment: string;
 }
 
-/**
- * Stage-level: the deploy role GitHub Actions assumes for one stage, shared by the platform and all services.
- * Uses the account's GitHub OIDC provider (GithubOidcProviderStack).
- * Deployed manually, once per stage, never by the pipeline itself.
- */
 export class GithubOidcStack extends Stack {
   constructor(scope: Construct, id: string, props: GithubOidcStackProps) {
     super(scope, id, props);

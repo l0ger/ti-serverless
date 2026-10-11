@@ -5,10 +5,8 @@ import { LogGroup, type RetentionDays } from 'aws-cdk-lib/aws-logs';
 import type { Construct } from 'constructs';
 
 export interface LambdaFunctionProps extends Omit<NodejsFunctionProps, 'logGroup' | 'logRetention'> {
-  /** Path to the handler file (e.g. `apis/create-person/index.ts`). */
   entry: string;
   logRetention: RetentionDays;
-  /** Applies to the function's log group. Defaults to DESTROY. */
   removalPolicy?: RemovalPolicy;
 }
 
@@ -30,7 +28,6 @@ export class LambdaFunction extends NodejsFunction {
       bundling: {
         minify: true,
         sourceMap: true,
-        // Bundle the AWS SDK too instead of using the runtime's copy (Lambda recommendation).
         externalModules: [],
         ...bundling,
       },

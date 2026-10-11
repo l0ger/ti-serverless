@@ -1,30 +1,20 @@
-import { randomUUID } from 'node:crypto';
-import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { ApiHandler } from 'shared/lambda-helpers';
+import type { CreatePersonParam, CreatePersonResult as CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
 import { CreatePersonRequest } from './schema';
 
-export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  let body: unknown;
-  try {
-    body = JSON.parse(event.body ?? '');
-  } catch {
-    return json(400, { message: 'Request body must be valid JSON' });
+export class CreatePersonHandler extends ApiHandler<typeof CreatePersonRequest, CreatePersonResponse> {
+  protected readonly schema = CreatePersonRequest;
+  protected override readonly statusCode = 201;
+
+  constructor(private readonly createPerson: CreatePersonUseCase) {
+    super();
   }
 
-  const result = CreatePersonRequest.safeParse(body);
-  if (!result.success) {
-    return json(400, { message: 'Invalid request', issues: result.error.issues });
+  protected execute(param: CreatePersonParam): Promise<CreatePersonResponse> {
+    return this.createPerson.execute(param);
   }
 
-  const person = { id: randomUUID(), ...result.data };
-  // TODO: save to DynamoDB, publish person-created event
-
-  return json(201, person, { Location: `/person/${person.id}` });
-}
-
-function json(statusCode: number, body: unknown, headers: Record<string, string> = {}): APIGatewayProxyResult {
-  return {
-    statusCode,
-    headers: { 'Content-Type': 'application/json', ...headers },
-    body: JSON.stringify(body),
-  };
+  protected override headers(person: CreatePersonResponse): Record<string, string> {
+    return { Location: `/person/${person.id}` };
+  }
 }

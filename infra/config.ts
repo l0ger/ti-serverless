@@ -8,7 +8,6 @@ export type Stage = (typeof stages)[number];
 export const githubRepository = 'l0ger@16212989/ti-serverless@1411527725';
 
 export interface PlatformConfig {
-  /** Prefix for stack and resource names. */
   name: string;
   stage: Stage;
   env: Required<Environment>;
@@ -28,7 +27,6 @@ const configs: Record<Stage, Omit<PlatformConfig, 'env'>> = {
   },
 };
 
-/** Reads the stage from `cdk ... -c stage=<stage>`. */
 export function getStage(app: App): Stage {
   const stage = app.node.tryGetContext('stage');
   if (!stages.includes(stage)) {
@@ -37,7 +35,6 @@ export function getStage(app: App): Stage {
   return stage;
 }
 
-/** Loads `env/<stage>.env` (shared with the GitHub workflow) and builds the stage config. */
 export function getPlatformConfig(stage: Stage): PlatformConfig {
   process.loadEnvFile(new URL(`./env/${stage}.env`, import.meta.url));
   return {
