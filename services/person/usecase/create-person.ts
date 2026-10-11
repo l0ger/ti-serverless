@@ -1,3 +1,5 @@
+import type { EventPublisher } from 'shared/event-bridge-helper';
+import { Person as PersonEventNames } from 'shared/events';
 import { ulid } from 'ulid';
 import type { Person } from '../domain/person';
 import type { PersonRepository } from '../domain/person-repository';
@@ -7,7 +9,10 @@ export type CreatePersonParam = Omit<Person, 'id'>;
 export type CreatePersonResult = Person;
 
 export class CreatePersonUseCase {
-  constructor(private readonly personRepository: PersonRepository) {}
+  constructor(
+    private readonly personRepository: PersonRepository,
+    private readonly eventPublisher: EventPublisher,
+  ) {}
 
   async execute(input: CreatePersonParam): Promise<CreatePersonResult> {
     const person: Person = {
@@ -25,12 +30,29 @@ export class CreatePersonUseCase {
     };
     try {
       await this.personRepository.create(person);
+      await this.eventPublisher.publish(PersonEventNames.PERSON_CREATED_EVENT, toPersonCreatedEvent(person));
     } catch (error) {
       console.error('[CreatePersonUseCase] failed to create person', { personId: person.id, error });
       throw new CreatePersonUseCaseError({ cause: error });
     }
     return person;
   }
+}
+
+function toPersonCreatedEvent(person: Person): PersonEventNames.PersonCreatedEvent {
+  return {
+    id: person.id,
+    firstName: person.firstName,
+    lastName: person.lastName,
+    phoneNumber: person.phoneNumber,
+    address: {
+      street: person.address.street,
+      houseNumber: person.address.houseNumber,
+      postalCode: person.address.postalCode,
+      city: person.address.city,
+      country: person.address.country,
+    },
+  };
 }
 
 export class CreatePersonUseCaseError extends Error {

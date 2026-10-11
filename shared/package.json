@@ -4,9 +4,12 @@
   "type": "module",
   "exports": {
     "./cdk": "./cdk/index.ts",
-    "./lambda-helpers": "./lambda-helpers/index.ts"
+    "./lambda-helpers": "./lambda-helpers/index.ts",
+    "./events": "./events/index.ts",
+    "./event-bridge-helper": "./event-bridge-helper/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-eventbridge": "^3.1149.0",
     "zod": "^4.6.5"
   }
 }
