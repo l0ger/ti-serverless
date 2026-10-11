@@ -11,7 +11,7 @@ export abstract class ApiHandler<TSchema extends z.ZodType, TResult> {
     return {};
   }
 
-  readonly handle = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  async handle(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     let body: unknown;
     try {
       body = JSON.parse(event.body ?? '');
@@ -31,7 +31,7 @@ export abstract class ApiHandler<TSchema extends z.ZodType, TResult> {
       console.error('[ApiHandler] request failed', error);
       return json(500, { message: 'Internal server error' });
     }
-  };
+  }
 }
 
 function json(statusCode: number, body: unknown, headers: Record<string, string> = {}): APIGatewayProxyResult {

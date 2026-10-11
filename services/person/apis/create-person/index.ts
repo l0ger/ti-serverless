@@ -1,3 +1,4 @@
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDbPersonRepository } from '../../repository/dynamodb-person';
@@ -12,4 +13,6 @@ if (!tableName) {
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const personRepository = new DynamoDbPersonRepository(client, tableName);
 
-export const handler = new CreatePersonHandler(new CreatePersonUseCase(personRepository)).handle;
+const createPersonHandler = new CreatePersonHandler(new CreatePersonUseCase(personRepository));
+
+export const handler = (event: APIGatewayProxyEvent) => createPersonHandler.handle(event);

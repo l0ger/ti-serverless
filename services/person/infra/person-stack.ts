@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
-import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { AuthorizationType, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import type { ITableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import type { Construct } from 'constructs';
 import { LambdaFunction } from 'shared/cdk';
@@ -28,6 +28,7 @@ export class PersonStack extends Stack {
     const api = new RestApi(this, 'PersonApi', {
       restApiName: `person-api-${props.config.stage}`,
       deployOptions: { stageName: props.config.stage },
+      defaultMethodOptions: { authorizationType: AuthorizationType.IAM },
     });
     api.root.addResource('person').addMethod('POST', new LambdaIntegration(createPersonLambda));
 
