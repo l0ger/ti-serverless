@@ -5,6 +5,8 @@ export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
 
 export interface PersonConfig {
+  /** Prefix for stack and resource names. */
+  name: string;
   stage: Stage;
   env: Required<Environment>;
   removalPolicy: RemovalPolicy;
@@ -15,6 +17,7 @@ export interface PersonConfig {
 
 const configs: Record<Stage, Omit<PersonConfig, 'env'>> = {
   test: {
+    name: 'person',
     stage: 'test',
     removalPolicy: RemovalPolicy.DESTROY,
     pointInTimeRecovery: false,
@@ -22,6 +25,7 @@ const configs: Record<Stage, Omit<PersonConfig, 'env'>> = {
     logRetention: RetentionDays.ONE_WEEK,
   },
   prod: {
+    name: 'person',
     stage: 'prod',
     removalPolicy: RemovalPolicy.RETAIN,
     pointInTimeRecovery: true,

@@ -6,12 +6,12 @@ import { PersonStack } from './person-stack';
 const app = new App();
 const config = getPersonConfig(getStage(app));
 
-const dataStack = new PersonDataStack(app, `PersonData-${config.stage}`, {
+const dataStack = new PersonDataStack(app, `${config.name}-data-${config.stage}`, {
   config,
   env: config.env,
 });
 
-const stack = new PersonStack(app, `Person-${config.stage}`, {
+const stack = new PersonStack(app, `${config.name}-${config.stage}`, {
   config,
   env: config.env,
   table: dataStack.table,
@@ -19,5 +19,5 @@ const stack = new PersonStack(app, `Person-${config.stage}`, {
 
 for (const s of [dataStack, stack]) {
   Tags.of(s).add('Stage', config.stage);
-  Tags.of(s).add('Service', 'person');
+  Tags.of(s).add('Service', config.name);
 }

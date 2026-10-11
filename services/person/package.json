@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "synth": "f() { cdk synth -c stage=${1:-test}; }; f",
-    "deploy": "f() { cdk deploy 'Person-*' -c stage=${1:-test}; }; f"
+    "deploy": "f() { cdk deploy 'person-*' -c stage=${1:-test}; }; f"
   },
   "dependencies": {
     "shared": "*",

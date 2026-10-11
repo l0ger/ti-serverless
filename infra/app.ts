@@ -7,20 +7,19 @@ import { PlatformStack } from './stacks/platform-stack';
 const app = new App();
 const config = getPlatformConfig(getStage(app));
 
-const stack = new PlatformStack(app, `Platform-${config.stage}`, {
+const stack = new PlatformStack(app, `${config.name}-${config.stage}`, {
   config,
   env: config.env,
 });
 
-// Deployed manually by `platform:bootstrap`; the pipeline only deploys Platform-<stage> and the service stacks.
-// Account-level, no stage in name or tags, so a second stage in the same account leaves it unchanged.
-const oidcProviderStack = new GithubOidcProviderStack(app, 'GithubOidcProvider', {
+const oidcProviderStack = new GithubOidcProviderStack(app, `${config.name}-github-oidc-provider`, {
   env: config.env,
 });
 
 // Stage-level deploy role.
-const oidcStack = new GithubOidcStack(app, `GithubOidc-${config.stage}`, {
+const oidcStack = new GithubOidcStack(app, `${config.name}-github-oidc-${config.stage}`, {
   env: config.env,
+  roleName: `${config.name}-github-deploy-${config.stage}`,
   repository: githubRepository,
   githubEnvironment: config.githubEnvironment,
 });
@@ -29,5 +28,5 @@ for (const s of [stack, oidcStack]) {
   Tags.of(s).add('Stage', config.stage);
 }
 for (const s of [stack, oidcProviderStack, oidcStack]) {
-  Tags.of(s).add('Owner', 'platform');
+  Tags.of(s).add('Owner', config.name);
 }

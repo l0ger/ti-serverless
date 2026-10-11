@@ -23,7 +23,7 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: services/person
-      stack: Person-test
+      stack: person-test
       stage: test
       environment: test
 
@@ -32,6 +32,6 @@ jobs:
     uses: ./.github/workflows/_deploy.yml
     with:
       working-directory: services/person
-      stack: Person-prod
+      stack: person-prod
       stage: prod
       environment: prod

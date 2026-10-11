@@ -8,7 +8,7 @@ on:
         type: string
         required: true
       stack:
-        description: Stack to deploy (never the GithubOidc-* stack)
+        description: Stack to deploy (never the platform-github-oidc-* stacks)
         type: string
         required: true
       stage:
@@ -16,7 +16,7 @@ on:
         type: string
         required: true
       environment:
-        description: GitHub environment; also names the deploy role (github-deploy-<environment>)
+        description: GitHub environment; also names the deploy role (platform-github-deploy-<environment>)
         type: string
         required: true
 
@@ -47,7 +47,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-deploy-${{ inputs.environment }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-github-deploy-${{ inputs.environment }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: cdk deploy
