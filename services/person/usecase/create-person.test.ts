@@ -27,6 +27,7 @@ describe('CreatePersonUseCase', () => {
     eventPublisher = { publish: jest.fn().mockResolvedValue(undefined) };
     useCase = new CreatePersonUseCase(personRepository, eventPublisher);
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'debug').mockImplementation(() => {});
   });
 
   afterEach(() => {

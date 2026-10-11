@@ -21,5 +21,6 @@ export class DynamoDbPersonRepository implements PersonRepository {
       console.error('[DynamoDbPersonRepository] failed to create person', { personId: person.id, tableName: this.tableName, error });
       throw new PersonRepositoryError('Failed to store person', { cause: error });
     }
+    console.debug('[DynamoDbPersonRepository] person created', { personId: person.id, tableName: this.tableName });
   }
 }

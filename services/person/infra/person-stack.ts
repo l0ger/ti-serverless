@@ -26,6 +26,7 @@ export class PersonStack extends Stack {
     const createPersonLambda = new LambdaFunction(this, 'CreatePersonLambda', {
       entry: join(import.meta.dirname, '../apis/create-person/index.ts'),
       logRetention: props.config.logRetention,
+      applicationLogLevelV2: props.config.logLevel,
       removalPolicy: props.config.removalPolicy,
       environment,
     });

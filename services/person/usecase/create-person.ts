@@ -35,6 +35,7 @@ export class CreatePersonUseCase {
       console.error('[CreatePersonUseCase] failed to create person', { personId: person.id, error });
       throw new CreatePersonUseCaseError({ cause: error });
     }
+    console.debug('[CreatePersonUseCase] person created', { personId: person.id });
     return person;
   }
 }

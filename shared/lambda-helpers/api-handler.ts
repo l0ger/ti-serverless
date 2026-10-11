@@ -26,6 +26,7 @@ export abstract class ApiHandler<TRequest, TResponse> {
 
     try {
       const result = await this.execute(parsed.data);
+      console.debug('[ApiHandler] request succeeded', { statusCode: this.statusCode });
       return json(this.statusCode, result, this.headers(result));
     } catch (error) {
       console.error('[ApiHandler] request failed', error);

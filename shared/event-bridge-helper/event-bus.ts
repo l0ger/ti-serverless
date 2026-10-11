@@ -28,6 +28,7 @@ export class EventBus implements EventPublisher {
         const entry = result.Entries?.[0];
         throw new Error(`PutEvents rejected the event: ${entry?.ErrorCode} ${entry?.ErrorMessage}`);
       }
+      console.debug('[EventBus] event published', { eventName: name, eventBusName: this.eventBusName, eventId: result.Entries?.[0]?.EventId });
     } catch (error) {
       console.error('[EventBus] failed to publish event', { eventName: name, eventBusName: this.eventBusName, error });
       throw new EventPublisherError(`Failed to publish ${name}`, { cause: error });

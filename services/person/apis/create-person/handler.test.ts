@@ -35,6 +35,7 @@ describe('CreatePersonHandler', () => {
     execute = jest.fn().mockResolvedValue(person);
     handler = new CreatePersonHandler({ execute } as unknown as CreatePersonUseCase);
     jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'debug').mockImplementation(() => {});
   });
 
   afterEach(() => {
