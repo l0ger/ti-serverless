@@ -4,6 +4,7 @@
   "type": "module",
   "workspaces": [
     "infra",
+    "shared",
     "services/*"
   ],
   "scripts": {
@@ -12,13 +13,19 @@
     "platform:synth": "npm run synth -w platform --",
     "platform:deploy": "npm run deploy -w platform --",
     "person:synth": "npm run synth -w person --",
-    "person:deploy": "npm run deploy -w person --"
+    "person:deploy": "npm run deploy -w person --",
+    "test": "jest"
   },
   "devDependencies": {
+    "@swc/core": "^1.16.18",
+    "@swc/jest": "^0.2.39",
+    "@types/aws-lambda": "^8.10.164",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.19.1",
     "aws-cdk": "2.1145.0",
     "aws-cdk-lib": "2.273.0",
     "constructs": "^10.4.0",
+    "jest": "^30.5.2",
     "tsx": "^4.20.0",
     "typescript": "~5.9.3"
   },

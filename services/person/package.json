@@ -4,6 +4,13 @@
   "type": "module",
   "scripts": {
     "synth": "f() { cdk synth -c stage=${1:-test}; }; f",
-    "deploy": "f() { cdk deploy 'Person-*' -c stage=${1:-test}; }; f"
+    "deploy": "f() { cdk deploy 'person-*' -c stage=${1:-test}; }; f"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1149.0",
+    "@aws-sdk/lib-dynamodb": "^3.1149.0",
+    "shared": "*",
+    "ulid": "^3.0.2",
+    "zod": "^4.6.5"
   }
 }

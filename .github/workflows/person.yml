@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - services/person/**
+      - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json
@@ -21,8 +22,9 @@ jobs:
     if: github.ref != 'refs/heads/master'
     uses: ./.github/workflows/_deploy.yml
     with:
+      service: person
       working-directory: services/person
-      stack: Person-test
+      stack: person-test
       stage: test
       environment: test
 
@@ -30,7 +32,8 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: ./.github/workflows/_deploy.yml
     with:
+      service: person
       working-directory: services/person
-      stack: Person-prod
+      stack: person-prod
       stage: prod
       environment: prod

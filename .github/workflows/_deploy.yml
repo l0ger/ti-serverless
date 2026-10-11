@@ -3,12 +3,16 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      service:
+        description: Service name, used in job names (person | platform)
+        type: string
+        required: true
       working-directory:
         description: CDK app folder(cdk.json)
         type: string
         required: true
       stack:
-        description: Stack to deploy (never the GithubOidc-* stack)
+        description: Stack to deploy (never the platform-github-oidc-* stacks)
         type: string
         required: true
       stage:
@@ -16,12 +20,33 @@ on:
         type: string
         required: true
       environment:
-        description: GitHub environment; also names the deploy role (github-deploy-<environment>)
+        description: GitHub environment; also names the deploy role (platform-github-deploy-<environment>)
         type: string
         required: true
 
 jobs:
+  unit-tests:
+    name: ${{ inputs.service }}-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
   deploy:
+    name: ${{ inputs.service }}-deploy
+    needs: unit-tests
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     concurrency:
@@ -40,14 +65,12 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
-
       - name: Load stage env file
         run: grep -Ev '^\s*(#|$)' "${{ inputs.working-directory }}/env/${{ inputs.stage }}.env" >> "$GITHUB_ENV"
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-deploy-${{ inputs.environment }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-github-deploy-${{ inputs.environment }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: cdk deploy
