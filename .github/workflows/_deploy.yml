@@ -3,6 +3,10 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      service:
+        description: Service name, used in job names (person | platform)
+        type: string
+        required: true
       working-directory:
         description: CDK app folder(cdk.json)
         type: string
@@ -21,7 +25,28 @@ on:
         required: true
 
 jobs:
+  unit-tests:
+    name: ${{ inputs.service }}-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
   deploy:
+    name: ${{ inputs.service }}-deploy
+    needs: unit-tests
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     concurrency:
@@ -39,8 +64,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-
-      - run: npm run build
 
       - name: Load stage env file
         run: grep -Ev '^\s*(#|$)' "${{ inputs.working-directory }}/env/${{ inputs.stage }}.env" >> "$GITHUB_ENV"

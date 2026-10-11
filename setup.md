@@ -42,4 +42,4 @@ npm run person:deploy test
 
 ## 4. Test
 
-Push a change under the unit's folder to a non-`master` branch, then check **Actions** in GitHub (environment `test`) and **CloudFormation** in AWS.
+Unit tests will be executed automatically on Github pipeline
