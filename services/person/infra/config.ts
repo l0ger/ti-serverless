@@ -1,4 +1,5 @@
-import type { App, Environment } from 'aws-cdk-lib';
+import { RemovalPolicy, type App, type Environment } from 'aws-cdk-lib';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 
 export const stages = ['test', 'prod'] as const;
 export type Stage = (typeof stages)[number];
@@ -6,18 +7,29 @@ export type Stage = (typeof stages)[number];
 export interface PersonConfig {
   stage: Stage;
   env: Required<Environment>;
+  removalPolicy: RemovalPolicy;
+  pointInTimeRecovery: boolean;
+  protectData: boolean;
+  logRetention: RetentionDays;
 }
 
 const configs: Record<Stage, Omit<PersonConfig, 'env'>> = {
   test: {
     stage: 'test',
+    removalPolicy: RemovalPolicy.DESTROY,
+    pointInTimeRecovery: false,
+    protectData: false,
+    logRetention: RetentionDays.ONE_WEEK,
   },
   prod: {
     stage: 'prod',
+    removalPolicy: RemovalPolicy.RETAIN,
+    pointInTimeRecovery: true,
+    protectData: true,
+    logRetention: RetentionDays.THREE_MONTHS,
   },
 };
 
-/** Reads the stage from `cdk ... -c stage=<stage>`. */
 export function getStage(app: App): Stage {
   const stage = app.node.tryGetContext('stage');
   if (!stages.includes(stage)) {
@@ -26,7 +38,6 @@ export function getStage(app: App): Stage {
   return stage;
 }
 
-/** Loads `env/<stage>.env` (shared with the GitHub workflow) and builds the stage config. */
 export function getPersonConfig(stage: Stage): PersonConfig {
   process.loadEnvFile(new URL(`../env/${stage}.env`, import.meta.url));
   return {

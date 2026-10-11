@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - services/person/**
+      - shared/**
       - package.json
       - package-lock.json
       - tsconfig.json

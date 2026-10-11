@@ -7,6 +7,7 @@
     "deploy": "f() { cdk deploy 'Person-*' -c stage=${1:-test}; }; f"
   },
   "dependencies": {
+    "shared": "*",
     "zod": "^4.6.5"
   }
 }
