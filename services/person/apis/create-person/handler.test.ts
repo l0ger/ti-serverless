@@ -1,5 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda';
-import type { CreatePersonResult, CreatePersonUseCase } from '../../usecase/create-person';
+import type { CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
 import { CreatePersonHandler } from './handler';
 
 const body = {
@@ -15,7 +15,7 @@ const body = {
   },
 };
 
-const person: CreatePersonResult = {
+const person: CreatePersonResponse = {
   id: '01M4NQCFXMXAXQNA882BA0BGAS',
   firstName: 'Jane',
   lastName: 'Doe',

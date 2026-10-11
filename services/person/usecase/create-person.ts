@@ -6,7 +6,7 @@ import type { PersonRepository } from '../domain/person-repository';
 
 export type CreatePersonParam = Omit<Person, 'id'>;
 
-export type CreatePersonResult = Person;
+export type CreatePersonResponse = Person;
 
 export class CreatePersonUseCase {
   constructor(
@@ -14,7 +14,7 @@ export class CreatePersonUseCase {
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(input: CreatePersonParam): Promise<CreatePersonResult> {
+  async execute(input: CreatePersonParam): Promise<CreatePersonResponse> {
     const person: Person = {
       id: ulid(),
       firstName: input.firstName,

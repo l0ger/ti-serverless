@@ -1,5 +1,5 @@
 import { ApiHandler } from 'shared/lambda-helpers';
-import type { CreatePersonParam, CreatePersonResult as CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
+import type { CreatePersonParam, CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
 import { CreatePersonRequest } from './schema';
 
 export class CreatePersonHandler extends ApiHandler<typeof CreatePersonRequest, CreatePersonResponse> {
