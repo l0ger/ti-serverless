@@ -2,9 +2,12 @@ import { join } from 'node:path';
 import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
 import { AuthorizationType, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import type { ITableV2 } from 'aws-cdk-lib/aws-dynamodb';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { CloudWatchLogGroup } from 'aws-cdk-lib/aws-events-targets';
+import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import type { Construct } from 'constructs';
 import { LambdaFunction } from 'shared/cdk';
+import { Person as PersonEvents } from 'shared/events';
 import type { PersonEnvironment } from '../env/environment';
 import type { PersonConfig } from './config';
 
@@ -34,6 +37,18 @@ export class PersonStack extends Stack {
 
     const platformEventBus = EventBus.fromEventBusName(this, 'PlatformEventBus', props.config.platformEventBusName);
     platformEventBus.grantPutEventsTo(createPersonLambda);
+
+    // Routes person-created-event to a log group until a consumer subscribes to it
+    const personCreatedLog = new LogGroup(this, 'PersonCreatedEventLog', {
+      logGroupName: `/aws/events/person-created-${props.config.stage}`,
+      retention: props.config.logRetention,
+      removalPolicy: props.config.removalPolicy,
+    });
+    new Rule(this, 'PersonCreatedRule', {
+      eventBus: platformEventBus,
+      eventPattern: { source: [props.config.name], detailType: [PersonEvents.PERSON_CREATED_EVENT] },
+      targets: [new CloudWatchLogGroup(personCreatedLog)],
+    });
 
     const api = new RestApi(this, 'PersonApi', {
       restApiName: `person-api-${props.config.stage}`,
