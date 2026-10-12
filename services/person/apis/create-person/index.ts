@@ -10,7 +10,8 @@ import { PersonEnvironment } from '../../env/environment';
 import { CreatePersonHandler } from './handler';
 
 const env = loadEnv(PersonEnvironment);
-
+// For scope of this assignment, I have not used dependency injection framework,
+// But in a real-world application, I would use one for example tsyringe to manage dependencies and improve testability. 
 const personRepository = new DynamoDbPersonRepository(DynamoDBDocumentClient.from(new DynamoDBClient({})), env.TABLE_NAME);
 const eventBus = new EventBus(new EventBridgeClient({}), env.PLATFORM_EVENT_BUS_NAME, env.SERVICE_NAME);
 
