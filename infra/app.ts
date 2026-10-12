@@ -1,5 +1,6 @@
 import { App, Tags } from 'aws-cdk-lib';
-import { getPlatformConfig, getStage, githubRepository } from './config';
+import { getStage } from 'shared/env-helpers';
+import { getPlatformConfig, githubRepository } from './config';
 import { GithubOidcProviderStack } from './stacks/github-oidc-provider-stack';
 import { GithubOidcStack } from './stacks/github-oidc-stack';
 import { PlatformStack } from './stacks/platform-stack';

@@ -6,5 +6,8 @@
     "bootstrap": "f() { cdk bootstrap -c stage=${1:-test} && cdk deploy platform-github-oidc-provider \"platform-github-oidc-${1:-test}\" -c stage=${1:-test}; }; f",
     "synth": "f() { cdk synth -c stage=${1:-test}; }; f",
     "deploy": "f() { cdk deploy \"platform-${1:-test}\" -c stage=${1:-test}; }; f"
+  },
+  "dependencies": {
+    "shared": "*"
   }
 }

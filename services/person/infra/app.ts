@@ -1,5 +1,6 @@
 import { App, Tags } from 'aws-cdk-lib';
-import { getPersonConfig, getStage } from './config';
+import { getStage } from 'shared/env-helpers';
+import { getPersonConfig } from './config';
 import { PersonDataStack } from './person-data-stack';
 import { PersonStack } from './person-stack';
 

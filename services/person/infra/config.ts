@@ -1,9 +1,7 @@
-import { RemovalPolicy, type App, type Environment } from 'aws-cdk-lib';
+import { RemovalPolicy, type Environment } from 'aws-cdk-lib';
 import { ApplicationLogLevel } from 'aws-cdk-lib/aws-lambda';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-
-export const stages = ['test', 'prod'] as const;
-export type Stage = (typeof stages)[number];
+import { requireEnv, type Stage } from 'shared/env-helpers';
 
 export interface PersonConfig {
   name: string;
@@ -40,26 +38,10 @@ const configs: Record<Stage, Omit<PersonConfig, 'env'>> = {
   },
 };
 
-export function getStage(app: App): Stage {
-  const stage = app.node.tryGetContext('stage');
-  if (!stages.includes(stage)) {
-    throw new Error(`Unknown stage "${stage}". Pass -c stage=<${stages.join('|')}>`);
-  }
-  return stage;
-}
-
 export function getPersonConfig(stage: Stage): PersonConfig {
   process.loadEnvFile(new URL(`../env/${stage}.env`, import.meta.url));
   return {
     ...configs[stage],
     env: { account: requireEnv('AWS_ACCOUNT_ID'), region: requireEnv('AWS_REGION') },
   };
-}
-
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing ${name}. Set it in the stage's env file.`);
-  }
-  return value;
 }
