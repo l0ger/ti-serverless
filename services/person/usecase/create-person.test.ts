@@ -1,5 +1,5 @@
 import type { EventPublisher } from 'shared/event-bridge-helper';
-import type { PersonRepository } from '../domain/person-repository';
+import { PersonAlreadyExistsError, type PersonRepository } from '../domain/person-repository';
 import { type CreatePersonParam, CreatePersonUseCase, CreatePersonUseCaseError } from './create-person';
 
 const param: CreatePersonParam = {
@@ -34,16 +34,11 @@ describe('CreatePersonUseCase', () => {
     jest.restoreAllMocks();
   });
 
-  it('creates a person with a ULID id and the given fields', async () => {
+  it('gives the person a ULID id, stores it, then publishes person-created-event, and returns it', async () => {
     const result = await useCase.execute(param);
 
     expect(result.id).toMatch(ULID);
     expect(result).toEqual({ id: result.id, ...param });
-  });
-
-  it('stores the person and publishes person-created-event with the same data', async () => {
-    const result = await useCase.execute(param);
-
     expect(personRepository.create).toHaveBeenCalledWith(result);
     expect(eventPublisher.publish).toHaveBeenCalledWith('person-created-event', result);
     expect(personRepository.create.mock.invocationCallOrder[0]).toBeLessThan(
@@ -72,6 +67,16 @@ describe('CreatePersonUseCase', () => {
 
     expect(error).toBeInstanceOf(CreatePersonUseCaseError);
     expect((error as Error).cause).toBe(cause);
+    expect(eventPublisher.publish).not.toHaveBeenCalled();
+  });
+
+  it('rethrows PersonAlreadyExistsError and publishes nothing when the person already exists', async () => {
+    const duplicate = new PersonAlreadyExistsError();
+    personRepository.create.mockRejectedValue(duplicate);
+
+    const error = await useCase.execute(param).catch((e: unknown) => e);
+
+    expect(error).toBe(duplicate);
     expect(eventPublisher.publish).not.toHaveBeenCalled();
   });
 

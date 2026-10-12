@@ -2,7 +2,7 @@ import type { EventPublisher } from 'shared/event-bridge-helper';
 import { Person as PersonEventNames } from 'shared/events';
 import { ulid } from 'ulid';
 import type { Person } from '../domain/person';
-import type { PersonRepository } from '../domain/person-repository';
+import { PersonAlreadyExistsError, type PersonRepository } from '../domain/person-repository';
 
 export type CreatePersonParam = Omit<Person, 'id'>;
 
@@ -32,6 +32,9 @@ export class CreatePersonUseCase {
       await this.personRepository.create(person);
       await this.eventPublisher.publish(PersonEventNames.PERSON_CREATED_EVENT, toPersonCreatedEvent(person));
     } catch (error) {
+      if (error instanceof PersonAlreadyExistsError) {
+        throw error;
+      }
       console.error('[CreatePersonUseCase] failed to create person', { personId: person.id, error });
       throw new CreatePersonUseCaseError({ cause: error });
     }

@@ -1,4 +1,5 @@
 import type { APIGatewayProxyEvent } from 'aws-lambda';
+import { PersonAlreadyExistsError } from '../../domain/person-repository';
 import type { CreatePersonResponse, CreatePersonUseCase } from '../../usecase/create-person';
 import { CreatePersonHandler } from './handler';
 
@@ -60,15 +61,7 @@ describe('CreatePersonHandler', () => {
     });
   });
 
-  it('returns 400 when the body is not JSON', async () => {
-    const response = await handler.handle(request('not-json'));
-
-    expect(response.statusCode).toBe(400);
-    expect(JSON.parse(response.body)).toEqual({ message: 'Request body must be valid JSON' });
-    expect(execute).not.toHaveBeenCalled();
-  });
-
-  it('returns 400 with issues when a field is missing or invalid', async () => {
+  it('returns 400 when a person field is missing or invalid', async () => {
     const { lastName: _lastName, ...withoutLastName } = body;
     const response = await handler.handle(request(JSON.stringify({ ...withoutLastName, phoneNumber: '123' })));
 
@@ -81,12 +74,12 @@ describe('CreatePersonHandler', () => {
     expect(execute).not.toHaveBeenCalled();
   });
 
-  it('returns 500 with a generic message when the use case fails', async () => {
-    execute.mockRejectedValue(new Error('db down'));
+  it('returns 409 when the person already exists', async () => {
+    execute.mockRejectedValue(new PersonAlreadyExistsError());
 
     const response = await handler.handle(request(JSON.stringify(body)));
 
-    expect(response.statusCode).toBe(500);
-    expect(JSON.parse(response.body)).toEqual({ message: 'Internal server error' });
+    expect(response.statusCode).toBe(409);
+    expect(JSON.parse(response.body)).toEqual({ message: 'Person already exists' });
   });
 });

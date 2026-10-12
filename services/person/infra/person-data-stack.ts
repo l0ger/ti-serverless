@@ -13,7 +13,9 @@ export class PersonDataStack extends Stack {
   constructor(scope: Construct, id: string, props: PersonDataStackProps) {
     super(scope, id, { ...props, terminationProtection: props.config.protectData });
     this.table = new TableV2(this, 'PersonTable', {
-      partitionKey: { name: 'id', type: AttributeType.STRING },
+      partitionKey: { name: 'pk', type: AttributeType.STRING },
+      // pk enforces uniqueness by name; this index lets the record be fetched by its id
+      globalSecondaryIndexes: [{ indexName: 'id-index', partitionKey: { name: 'id', type: AttributeType.STRING } }],
       removalPolicy: props.config.removalPolicy,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: props.config.pointInTimeRecovery },
     });

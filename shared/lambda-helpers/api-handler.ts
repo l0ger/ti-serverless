@@ -11,6 +11,11 @@ export abstract class ApiHandler<TRequest, TResponse> {
     return {};
   }
 
+  // Override to map known errors to a response; undefined falls back to 500
+  protected errorResponse(_error: unknown): APIGatewayProxyResult | undefined {
+    return undefined;
+  }
+
   async handle(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     let body: unknown;
     try {
@@ -29,13 +34,18 @@ export abstract class ApiHandler<TRequest, TResponse> {
       console.debug('[ApiHandler] request succeeded', { statusCode: this.statusCode });
       return json(this.statusCode, result, this.headers(result));
     } catch (error) {
+      const response = this.errorResponse(error);
+      if (response) {
+        console.debug('[ApiHandler] request rejected', { statusCode: response.statusCode });
+        return response;
+      }
       console.error('[ApiHandler] request failed', error);
       return json(500, { message: 'Internal server error' });
     }
   }
 }
 
-function json(statusCode: number, body: unknown, headers: Record<string, string> = {}): APIGatewayProxyResult {
+export function json(statusCode: number, body: unknown, headers: Record<string, string> = {}): APIGatewayProxyResult {
   return {
     statusCode,
     headers: { 'Content-Type': 'application/json', ...headers },
