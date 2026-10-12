@@ -1,6 +1,6 @@
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { type DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
-import type { Person } from '../domain/person';
+import { type Person, personKey } from '../domain/person';
 import { PersonAlreadyExistsError, type PersonRepository, PersonRepositoryError } from '../domain/person-repository';
 
 /**
@@ -32,12 +32,4 @@ export class DynamoDbPersonRepository implements PersonRepository {
     }
     console.debug('[DynamoDbPersonRepository] person created', { personId: person.id, tableName: this.tableName });
   }
-}
-
-/**
- * I assumed A person is unique by first name + last name, but in reality,
- * We might need  to use a more robust unique identifier (e.g. date of birth or email) to the key
- */
-function personKey(person: Person): string {
-  return `PERSON#${person.firstName.toLowerCase()}#${person.lastName.toLowerCase()}`;
 }
