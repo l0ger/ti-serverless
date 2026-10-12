@@ -1,5 +1,5 @@
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
-import { type DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import type { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import type { Person } from '../domain/person';
 import { PersonAlreadyExistsError, PersonRepositoryError } from '../domain/person-repository';
 import { DynamoDbPersonRepository } from './dynamodb-person';
