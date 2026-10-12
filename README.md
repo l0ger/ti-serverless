@@ -30,7 +30,7 @@ The repository is an npm workspaces monorepo
 
 ## Microservice template
 
-Every microservice follows the layout of `services/person`, based on Clean Architecture. Dependencies point inward only: `apis` and `repository` depend on `usecase` and `domain`, never the other way round.
+Every microservice follows the layout of `services/person`
 
 ```
 services/<name>/
