@@ -33,7 +33,7 @@ export class PersonStack extends Stack {
       removalPolicy: props.config.removalPolicy,
       environment,
     });
-    props.table.grantWriteData(createPersonLambda);
+    props.table.grant(createPersonLambda, 'dynamodb:PutItem');
 
     const platformEventBus = EventBus.fromEventBusName(this, 'PlatformEventBus', props.config.platformEventBusName);
     platformEventBus.grantPutEventsTo(createPersonLambda);
